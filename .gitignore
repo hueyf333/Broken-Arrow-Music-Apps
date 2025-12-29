@@ -1,0 +1,46 @@
+# Build artifacts
+Builds/
+JuceLibraryCode/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+*.vcxproj.filters
+ipch/
+x64/
+x86/
+Debug/
+Release/
+
+# macOS
+.DS_Store
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# Projucer auto-generated files
+*.vcxproj
+*.sln
+*.xcodeproj/
+Makefile
+
+# Temporary files
+*.swp
+*.swo
+*~
+.cache/
+
+# Node modules (if any)
+node_modules/
