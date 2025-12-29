@@ -51,7 +51,7 @@ MainWindow::MainWindow(juce::String name)
     createNewScore();
     
     mainComponent = std::make_unique<MainComponent>(score, commandStack);
-    setContentOwned(mainComponent.get(), true);
+    setContentOwned(mainComponent.get(), false); // We manage it with unique_ptr
     
     setMenuBar(this);
     
@@ -71,7 +71,9 @@ MainWindow::MainWindow(juce::String name)
 MainWindow::~MainWindow()
 {
     setMenuBar(nullptr);
+    clearContentComponent(); // Remove content before destroying
     setLookAndFeel(nullptr);
+    mainComponent.reset(); // Explicitly destroy
 }
 
 void MainWindow::closeButtonPressed()

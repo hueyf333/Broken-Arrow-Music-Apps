@@ -228,20 +228,61 @@ void ScoreRenderer::renderNote(juce::Graphics& g, juce::Point<float> position, c
 void ScoreRenderer::renderRest(juce::Graphics& g, juce::Point<float> position, const Note& note)
 {
     g.setColour(juce::Colours::white);
-    g.setFont(juce::Font(20.0f * zoom));
     
-    juce::String restSymbol;
+    // Draw rest symbols using simple shapes
+    float restY = position.y - 10.0f * zoom;
+    float restX = position.x;
+    
     switch (note.getDuration())
     {
-        case NoteDuration::Whole:     restSymbol = "-"; break;
-        case NoteDuration::Half:      restSymbol = "-"; break;
-        case NoteDuration::Quarter:   restSymbol = "𝄽"; break;
-        case NoteDuration::Eighth:    restSymbol = "𝄾"; break;
-        case NoteDuration::Sixteenth: restSymbol = "𝄿"; break;
+        case NoteDuration::Whole:
+            // Whole rest (filled rectangle hanging from line)
+            g.fillRect(restX - 8.0f * zoom, restY + 5.0f * zoom, 16.0f * zoom, 4.0f * zoom);
+            break;
+            
+        case NoteDuration::Half:
+            // Half rest (filled rectangle sitting on line)
+            g.fillRect(restX - 8.0f * zoom, restY, 16.0f * zoom, 4.0f * zoom);
+            break;
+            
+        case NoteDuration::Quarter:
+            // Quarter rest (simplified squiggle)
+            {
+                juce::Path quarterRest;
+                quarterRest.startNewSubPath(restX - 5.0f * zoom, restY - 5.0f * zoom);
+                quarterRest.lineTo(restX + 5.0f * zoom, restY);
+                quarterRest.lineTo(restX - 5.0f * zoom, restY + 5.0f * zoom);
+                quarterRest.lineTo(restX + 5.0f * zoom, restY + 10.0f * zoom);
+                g.strokePath(quarterRest, juce::PathStrokeType(2.0f * zoom));
+            }
+            break;
+            
+        case NoteDuration::Eighth:
+            // Eighth rest (simple flag)
+            {
+                juce::Path eighthRest;
+                eighthRest.startNewSubPath(restX, restY - 5.0f * zoom);
+                eighthRest.lineTo(restX, restY + 5.0f * zoom);
+                eighthRest.lineTo(restX + 5.0f * zoom, restY + 10.0f * zoom);
+                g.strokePath(eighthRest, juce::PathStrokeType(2.0f * zoom));
+                g.fillEllipse(restX - 3.0f * zoom, restY - 3.0f * zoom, 6.0f * zoom, 6.0f * zoom);
+            }
+            break;
+            
+        case NoteDuration::Sixteenth:
+            // Sixteenth rest (two flags)
+            {
+                juce::Path sixteenthRest;
+                sixteenthRest.startNewSubPath(restX, restY - 5.0f * zoom);
+                sixteenthRest.lineTo(restX, restY + 5.0f * zoom);
+                sixteenthRest.lineTo(restX + 5.0f * zoom, restY + 10.0f * zoom);
+                sixteenthRest.startNewSubPath(restX, restY);
+                sixteenthRest.lineTo(restX + 5.0f * zoom, restY + 5.0f * zoom);
+                g.strokePath(sixteenthRest, juce::PathStrokeType(2.0f * zoom));
+                g.fillEllipse(restX - 3.0f * zoom, restY - 3.0f * zoom, 6.0f * zoom, 6.0f * zoom);
+            }
+            break;
     }
-    
-    g.drawText(restSymbol, position.x - 10.0f * zoom, position.y - 10.0f * zoom,
-              20.0f * zoom, 20.0f * zoom, juce::Justification::centred);
 }
 
 void ScoreRenderer::renderTabStaff(juce::Graphics& g, juce::Rectangle<float> area, const Track& track, int measureStart, int measureEnd)

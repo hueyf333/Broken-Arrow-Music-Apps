@@ -3,15 +3,15 @@
 PlaybackEngine::PlaybackEngine(Score& s)
     : score(s)
 {
-    // Initialize synthesiser with some voices
+    // Initialize synthesiser with basic voices
+    // Note: For a more complete implementation, you would add actual synthesizer voices
+    // For now, this provides a basic framework that compiles
     for (int i = 0; i < 8; ++i)
         synthesiser.addVoice(new juce::SamplerVoice());
     
-    synthesiser.addSound(new juce::SamplerSound("default", 
-                                                *new juce::AudioFormatReader(nullptr),
-                                                juce::Range<int>(0, 127),
-                                                60,
-                                                0.1, 0.1, 10.0));
+    // Note: In a production app, you would load actual audio samples here
+    // This is a placeholder that allows compilation
+    synthesiser.setNoteStealingEnabled(true);
 }
 
 PlaybackEngine::~PlaybackEngine()
